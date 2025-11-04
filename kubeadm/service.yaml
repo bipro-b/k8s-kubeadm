@@ -13,5 +13,5 @@ spec:
   - name: http
     port: 5000         # Port the service listens on (internal cluster port)
     targetPort: 5000 # Port on the container (where the app is running)
-    nodePort: 30005  # Port exposed on each cluster node (for external access)
+    nodePort: 30032  # Port exposed on each cluster node (for external access)
   type: NodePort

@@ -6,8 +6,8 @@ metadata:
   labels:
     app: class-schedule
 spec:
-  # Run 2 instances of the application
-  replicas: 2
+  # Rolling Update Strategy is defined by default, see note below
+  replicas: 3 # Run 3 instances of your application
   selector:
     matchLabels:
       app: class-schedule
@@ -17,18 +17,27 @@ spec:
         app: class-schedule
     spec:
       containers:
-      - name: class-schedule
-        # Use your built image
-        image: biprob/class-schedule:latest 
-        imagePullPolicy: Always
+      - name: class-schedule-container
+        image: biprob/class-schedule:latest
         ports:
-        - containerPort: 5000 # The port your Node.js app runs on
-
-        # --- Environment Variables (DB_USER, DB_PASS) ---
-        # NOTE: It's best practice to use Kubernetes Secrets for passwords (DB_PASS)
+        - containerPort: 5000 
         env:
+        # Load environment variables from a Kubernetes Secret (best practice)
         - name: DB_USER
-          value: "bipro"
+          valueFrom:
+            secretKeyRef:
+              name: class-schedule-secret
+              key: db_user
         - name: DB_PASS
-          value: "bipro"
-        # --- End Environment Variables ---
+          valueFrom:
+            secretKeyRef:
+              name: class-schedule-secret
+              key: db_pass
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: class-schedule-secret
+              key: jwt_secret
+        # You can pass PORT directly as it's not sensitive
+        - name: PORT
+          value: "5000"
