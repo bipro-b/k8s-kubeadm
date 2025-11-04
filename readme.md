@@ -1,5 +1,3 @@
-
-````markdown
 # Kubernetes Cluster Setup using Kubeadm
 
 This guide explains how to set up a Kubernetes cluster using **kubeadm** on AWS EC2 Ubuntu instances.
